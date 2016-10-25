@@ -1,56 +1,164 @@
 #ifndef SodaSodaCan_hpp
 #define SodaSodaCan_hpp
-#include<string>
-#include<iostream>
+
+#include <iostream>
 using namespace std;
 
-class SodaCan
-{
-	string my_Brand;
-	int my_Size;
-	int my_Contents;
+class SodaCan{
 
-	public :
-		SodaCan();
-		SodaCan (string brand, int size, int contents);
-		int contents ();
-		int getContents();
-		int getSize ();
-		bool isEmpty();
-		void pourInSoda(int amount);
-		void drink(int amount);
-		void setSize(int size);
-		void setBrand(string brand);
-		string getBrand ();
+private:
 
+    string my_Brand;
+    int my_Size;
+    int my_Contents;
 
+    //added members; expired date
+    int expDay;
+    int expMonth;
+    int expYear;
 
+public:
+
+    //constructors
+    SodaCan(){
+        my_Brand = "";
+        my_Size = 0;
+        my_Contents = 0;
+    };
+    SodaCan(string brand, int Size, int contents){
+        this->my_Brand = brand;
+        this->my_Size = Size;
+        this->my_Contents = contents;
+    };
+
+    bool isFull(); //added method; to check if the can is full (content>size)
+    bool isExpired(int, int, int); //added method; to check if the drink is expired (date)
+    bool isEmpty(); //to check if the can is empty
+
+    void pourInSoda(int amount); //add content
+    void drink(int amount); //subtract content
+
+    void setSize(int Size); //re-determine container size
+    void setBrand(string brand); //
+
+    string getBrand(); //display brand
+    int getContents(); //display content
+    int getSize(); //display size
+
+    //added methods
+    void setExpiredDay(int);
+    void setExpiredMonth(int);
+    void setExpiredYear(int);
+
+    //added methods
+    int totalContent(SodaCan &, SodaCan &); //sum of two cans
+    int diffContent(SodaCan &, SodaCan &); //difference in the two cans
 };
 
-void SodaCan::pourInSoda(int amount)
-{
-	my_Contents = amount;
+bool SodaCan::isExpired(int currDay, int currMonth, int currYear){
+
+    bool valid = false;
+
+    if(currYear > expYear){
+        valid = true;
+    } else if(currMonth > expMonth){
+        valid = true;
+    } else if(currDay > expDay && currMonth==expMonth){
+        valid = true;
+    }
+
+    return valid;
 }
 
-void SodaCan::setSize(int size)
-{
-	my_Size = size;
+bool SodaCan::isFull(){
+
+    bool valid = false;
+
+    if(my_Contents > my_Size){
+
+        valid = true;
+    }
+
+    return valid;
 }
 
-void SodaCan::setBrand(string brand)
-{
-	my_Brand = brand;
+bool SodaCan::isEmpty(){
+
+    bool valid = false;
+
+    if(my_Contents == 0){
+
+        valid = true;
+    }
+
+    return valid;
 }
 
-int SodaCan::getSize()
-{
-	return my_Size;
+void SodaCan::pourInSoda(int amount){
+
+    my_Contents += amount;
 }
 
-string SodaCan::getBrand()
-{
-	return my_Brand;
+void SodaCan::drink(int amount){
+
+    this->my_Contents -= amount;
 }
 
+void SodaCan::setSize(int Size){
 
-#endif
+    this->my_Size = Size;
+}
+
+void SodaCan::setBrand(string brand){
+
+    this->my_Brand = brand;
+}
+
+int SodaCan::getContents(){
+
+    return my_Contents;
+}
+
+int SodaCan::getSize(){
+
+    return my_Size;
+}
+
+string SodaCan::getBrand(){
+
+    return my_Brand;
+}
+
+void SodaCan::setExpiredDay(int day){
+
+    this->expDay = day;
+}
+
+void SodaCan::setExpiredMonth(int month){
+
+    this->expMonth = month;
+}
+
+void SodaCan::setExpiredYear(int year){
+
+    this->expYear = year;
+}
+
+int SodaCan::totalContent(SodaCan &obj1, SodaCan &obj2){
+
+    int newContent = obj1.getContents() + obj2.getContents();
+    return newContent;
+}
+
+int SodaCan::diffContent(SodaCan &obj1, SodaCan &obj2){
+
+    int newContent;
+
+    if(obj1.getContents() > obj2.getContents()){
+        newContent = obj1.getContents() - obj2.getContents();
+    } else obj2.getContents() - obj1.getContents();
+
+    return newContent;
+}
+
+#endif // SodaCan_hpp
